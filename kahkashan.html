@@ -1,0 +1,390 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kahkashan’s Birthday Puzzle</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(#0e0e1a, #1a1a2e);
+      font-family: 'Poppins', sans-serif;
+      color: #fff;
+      overflow-x: hidden;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 100px);
+      grid-gap: 20px;
+      justify-content: center;
+      margin-top: 80px;
+    }
+    .block {
+      width: 100px;
+      height: 100px;
+      background: #222;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border-radius: 12px;
+      font-size: 18px;
+      transition: 0.3s;
+      box-shadow: 0 0 10px rgba(255, 64, 129, 0.3);
+      animation: pulse 3s infinite;
+    }
+    .block:hover {
+      background: #444;
+      transform: scale(1.1);
+      box-shadow: 0 0 20px rgba(255, 64, 129, 0.8);
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      text-align: center;
+      animation: fadeIn 0.5s ease;
+    }
+    .modal-content {
+      background: #1a1a1a;
+      padding: 30px;
+      border-radius: 12px;
+      max-width: 500px;
+      color: #fff;
+      box-shadow: 0 0 20px #ff4081;
+      animation: zoomIn 0.5s ease;
+    }
+    .close {
+      margin-top: 20px;
+      background: #ff4081;
+      padding: 8px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      color: #fff;
+    }
+    .bg-hearts, .bg-stars, .bg-fireflies {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      overflow: hidden;
+      z-index: -2;
+    }
+    .heart, .star, .firefly {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.6;
+    }
+    .heart {
+      width: 15px;
+      height: 15px;
+      background: #ff4081;
+      transform: rotate(45deg);
+      animation: float 8s linear infinite;
+    }
+    .heart::before,
+    .heart::after {
+      content: '';
+      position: absolute;
+      width: 15px;
+      height: 15px;
+      background: #ff4081;
+      border-radius: 50%;
+    }
+    .heart::before {
+      top: -7.5px;
+      left: 0;
+    }
+    .heart::after {
+      left: 7.5px;
+      top: 0;
+    }
+    .star {
+      width: 2px;
+      height: 2px;
+      background: #ffffff;
+      animation: twinkle 2s infinite ease-in-out;
+    }
+    .firefly {
+      width: 6px;
+      height: 6px;
+      background: #fffb91;
+      animation: flicker 4s infinite ease-in-out, drift 20s linear infinite;
+    }
+    @keyframes float {
+      0% {transform: translateY(0) rotate(45deg);}
+      100% {transform: translateY(-1000px) rotate(45deg);}
+    }
+    @keyframes twinkle {
+      0%, 100% {opacity: 0.2;}
+      50% {opacity: 1;}
+    }
+    @keyframes fadeIn {
+      from {opacity: 0;}
+      to {opacity: 1;}
+    }
+    @keyframes zoomIn {
+      from {transform: scale(0.8); opacity: 0;}
+      to {transform: scale(1); opacity: 1;}
+    }
+    @keyframes flicker {
+      0%, 100% {opacity: 0.3;}
+      50% {opacity: 1;}
+    }
+    @keyframes drift {
+      from {transform: translate(0, 0);}
+      to {transform: translate(100vw, -100vh);}
+    }
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 10px rgba(255, 64, 129, 0.3); }
+      50% { box-shadow: 0 0 20px rgba(255, 64, 129, 0.6); }
+    }
+    h1 {
+  text-align: center;
+  margin-top: 30px;
+  font-size: 32px;
+  background: linear-gradient(to right, #ff4081, #ffd1dc);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+  </style>
+</head>
+<style>
+body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      color: #fff;
+      overflow-x: hidden;
+      background: linear-gradient(-45deg, #fbeaff, #ffeaea, #d0f0fd, #fff0db);
+      background-size: 400% 400%;
+      animation: gradientBG 20s ease infinite;
+    }
+    @keyframes gradientBG {
+      0% {background-position: 0% 50%;}
+      50% {background-position: 100% 50%;}
+      100% {background-position: 0% 50%;}
+    }
+    h1 {
+      text-align: center;
+      margin-top: 30px;
+      font-size: 32px;
+      background: linear-gradient(to right, #ff4081, #ffd1dc);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .wishing-star-btn {
+      display: block;
+      margin: 20px auto;
+      padding: 10px 20px;
+      background: #ff4081;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 18px;
+    }
+    .wishing-star {
+      position: absolute;
+      font-size: 24px;
+      color: gold;
+      animation: fallStar 2.5s ease-out forwards;
+      pointer-events: none;
+      text-shadow: 0 0 8px #ffd700, 0 0 15px #ffea00, 0 0 20px #ffff66;
+    }
+    @keyframes fallStar {
+      0% {transform: translateY(0); opacity: 1;}
+      100% {transform: translateY(100vh); opacity: 0;}
+    }
+    .note-jar {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #ff4081;
+      color: white;
+      padding: 10px;
+      border-radius: 10px;
+      cursor: pointer;
+      animation: bounce 2s infinite;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    .note-popup {
+      position: fixed;
+      bottom: 80px;
+      right: 20px;
+      background: #1a1a1a;
+      color: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #ff4081;
+      display: none;
+      max-width: 250px;
+    }
+    .star {
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      background: white;
+      border-radius: 50%;
+      transition: transform 0.3s, opacity 0.3s;
+      pointer-events: none;
+    }
+    .spotify-embed {
+      display: flex;
+      justify-content: center;
+      margin: 20px auto;
+      width: 100%;
+      max-width: 400px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Happy Birthday Kahkashan!</h1>
+  <div class="spotify-embed">
+    <audio controls>
+      <source src="c:\Users\hanee\Downloads\SpotiDownloader.com - You Are In Love (Taylor's Version) - Taylor Swift.mp3" type="audio/mpeg">
+    </audio>
+  </div>
+
+  <button class="wishing-star-btn" onclick="makeWishingStar()">🌠 Make a Wish</button>
+  <div class="note-jar" onclick="showNote()">📜 Jar of Notes</div>
+  <div class="note-popup" id="notePopup"></div>
+
+  <script>
+    const notes = [
+      "You're my favorite kind of forever.",
+      "You light up my world like nobody else.",
+      "Every moment with you is a blessing.",
+      "I fall in love with you all over again every single day.",
+      "Is it wrong to dream of growing old with you?",
+      "u r worth melting for",
+      "You understand my love language",
+      "You talk to me without words",
+      "I miss you when u r not around",
+      "I still get butterflies even though I hv seen you a thousand times",
+      "I am wearing the smile you gave me"
+    ];
+    function showNote() {
+      const notePopup = document.getElementById("notePopup");
+      const randomNote = notes[Math.floor(Math.random() * notes.length)];
+      notePopup.innerText = randomNote;
+      notePopup.style.display = "block";
+      setTimeout(() => { notePopup.style.display = "none"; }, 4000);
+    }
+    function makeWishingStar() {
+      const star = document.createElement("div");
+      star.className = "wishing-star";
+      star.innerText = "★";
+      star.style.left = Math.random() * window.innerWidth + 'px';
+      star.style.top = "0px";
+      document.body.appendChild(star);
+      setTimeout(() => star.remove(), 2500);
+    }
+    const reactiveStars = [];
+    for (let i = 0; i < 80; i++) {
+      const star = document.createElement('div');
+      star.className = 'star';
+      star.style.left = Math.random() * window.innerWidth + 'px';
+      star.style.top = Math.random() * window.innerHeight + 'px';
+      document.body.appendChild(star);
+      reactiveStars.push(star);
+    }
+    document.addEventListener('mousemove', e => {
+      reactiveStars.forEach(star => {
+        const dx = e.clientX - star.offsetLeft;
+        const dy = e.clientY - star.offsetTop;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 100) {
+          star.style.transform = 'scale(2)';
+          star.style.opacity = '1';
+        } else {
+          star.style.transform = 'scale(1)';
+          star.style.opacity = '0.5';
+        }
+      });
+    });
+  </script>
+  </head>
+  <body><div class="bg-hearts" id="hearts"></div><h1 style="text-align:center; margin-top:30px; font-size:32px;">💋</h1><div class="grid">
+    <div class="block" onclick="openModal('MISSING YOU')">MISS U</div>
+    <div class="block" onclick="openModal('PUCHCHI LO')">MMUUAAH</div>
+    <div class="block" onclick="openModal('SHARIK E HAYAT')">HAYYEEE</div>
+    <div class="block" onclick="openModal('HU TO AAPKA')">SORRYYY</div>
+    <div class="block" onclick="openModal('ILAHI AMEEN')">AMEEEEN</div>
+    <div class="block" onclick="openModal('MERI SHEHZADI')">BACHCHA</div>
+  </div><div class="modal" id="MISSING YOU">
+    <div class="modal-content">
+      <h2>MISSING YOU</h2>
+      <p>Hey Kahkashan Hanee Rizvi,u know… there’s a weird emptiness in my days when u ain’t around. like everything’s moving but nothing feels alive. i hear songs nd somehow it’s always u who comes to my mind. sometimes even random things like the color of the sky or a line in a movie reminds me of u. nd it hits me how badly i miss u. like really miss u. i miss the way u tease me, the way u get mad nd then melt when i call u meri shehzadi, the way u tell me about ur day, even the way u go silent when u overthink stuff. i miss everything babe. m counting every moment till i can see u, hold ur hand nd tell u how much u mean to me. u ain’t just a part of my life, u r my whole world</p>
+      <button class="close" onclick="closeModal('MISSING YOU')">Close</button>
+    </div>
+  </div><div class="modal" id="PUCHCHI LO">
+    <div class="modal-content">
+      <h2>PUCHCHI LO</h2>
+      <p> Kahkashan Hanee Rizvi, sometimes i sit nd just think about how lucky i am to have u. like seriously, what did i even do right to deserve someone like u? thank u for loving a crazy mess like me, for handling my mood swings, for staying when u could’ve walked away. thank u for all ur patience, ur soft words when i needed them the most, nd for being my biggest supporter.u ve been my sunshine on my darkest days nd my peace when everything felt like a mess. u taught me what it feels like to be genuinely loved. nd trust me meri jaan, that’s the kinda love people spend lifetimes searching for. i swear i’ll keep u happy, hold u through everything nd never stop reminding u how precious u r to me</p>
+      <button class="close" onclick="closeModal('PUCHCHI LO')">Close</button>
+    </div>
+  </div><div class="modal" id="SHARIK E HAYAT">
+    <div class="modal-content">
+      <h2>SHARIK E HAYAT</h2>
+      <p>hey baby,it’s late, lights are off, nd m lying here thinking about u like i always do. nd damn, i feel like the luckiest person to have u. there’s this warmth u bring into my life, nd i crave it every second. i imagine holding u close, listening to ur heartbeat nd getting lost in ur eyes.i wanna take u out on random late-night drives, park somewhere quiet nd just talk about life, our dreams nd silly things. i wanna wake up to ur face in the morning, fight over blankets, nd have coffee while u complain about how i snore. i wanna have a life filled with moments with u, both big nd small. let’s make that happen someday soon… just u, me nd a world of our own.</p>
+      <button class="close" onclick="closeModal('SHARIK E HAYAT')">Close</button>
+    </div>
+  </div><div class="modal" id="HU TO AAPKA">
+    <div class="modal-content">
+      <h2>HU TO AAPKA</h2>
+      <p> Kahkashan Hanee Rizvi,i know i ain’t perfect. i mess up, nd sometimes i hurt u when it’s the last thing i’d wanna do. nd for every single time i’ve made ur heart heavy, m sorry baby.u deserve nothing but peace nd love. nd i promise to try better, to be better, for u. coz loving u ain’t a choice for me, it’s who i am. u r my calm in chaos, my person, nd no matter how bad i screw up, one thing that’ll never change is how much i adore u. i’ll choose u everyday, even on the hard days, even when things ain’t easy. coz there’s no version of my life that makes sense without u in it.</p>
+      <button class="close" onclick="closeModal('HU TO AAPKA')">Close</button>
+    </div>
+  </div><div class="modal" id="ILAHI AMEEN">
+    <div class="modal-content">
+      <h2>ILAHI AMEEN</h2>
+      <p>mera bachcha i swear i imagine our future so much it feels real sometimes. i see us living in a cozy lil place, having plants we forget to water, watching horror movies while u hide behind me, nd going on long road trips with no destination.i picture us fighting over dumb stuff, then making up with kisses nd ice cream at 2am. i wanna see u in ur lazy clothes on weekends, hear u rant about work, nd spend nights on the terrace talking about random things like what if we had a pet or if aliens exist.i wanna grow old with u, see wrinkles on ur face nd still call u my most beautiful girl. coz no matter how much time passes, u’ll always be my person, my Kahkashan, my forever.</p>
+      <button class="close" onclick="closeModal('ILAHI AMEEN')">Close</button>
+    </div>
+  </div><div class="modal" id="MERI SHEHZADI">
+    <div class="modal-content">
+      <h2>MERI SHEHZADI</h2>
+      <p>Happy Birthday, my love. This world lit a lil brighter the day u were born.happy birthday my jaan,on this day, god made a masterpiece nd sent her straight into my life. u r so much more than just beautiful, ur heart, ur soul, ur kindness, it’s rare. i thank god everyday for u. u make my life brighter, my days lighter nd my heart so damn full.i pray this year gives u everything u’ve wished for. may u always have reasons to smile, to glow nd to stay as magical as u r. i hope u always feel loved, not just today but every single day. coz meri jaan, u deserve the whole damn world. can’t wait to celebrate a million more birthdays with u — each better than the last. love u endlessly, beyond words, beyond life, beyond everything.</p>
+      <button class="close" onclick="closeModal('MERI SHEHZADI')">Close</button>
+    </div>
+  </div><script>
+  function openModal(id) {
+    document.getElementById(id).style.display = 'flex';
+  }
+  function closeModal(id) {
+    document.getElementById(id).style.display = 'none';
+  }
+  
+  // hearts animation
+  function createHearts() {
+    const heartsContainer = document.getElementById('hearts');
+    for(let i=0; i<40; i++) {
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      heart.style.left = Math.random() * window.innerWidth + 'px';
+      heart.style.top = Math.random() * window.innerHeight + 'px';
+      heart.style.animationDuration = (5 + Math.random() * 5) + 's';
+      heartsContainer.appendChild(heart);
+    }
+  }
+  createHearts();
+  </script>
+</body>
+</html>
